@@ -1,0 +1,26 @@
+.section {
+    flex: 1;
+    margin: 0 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.section h2 {
+    text-align: center;
+}
+
+.section button {
+    display: block;
+    margin: 1rem auto;
+}
+
+.sortable-item {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+}
