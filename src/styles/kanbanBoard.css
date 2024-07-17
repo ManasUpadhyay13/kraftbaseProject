@@ -16,9 +16,42 @@
 .singleColumn {
     min-height: 500px;
     width: 300px;
-    border: 1px solid black;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.singleColumnHeading {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: gray;
+}
+
+.singleContainerTasks {
+    border: 1px solid lightgray;
+    width: 95%;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-top: 15px;
+    min-height: 100px;
+    padding: 10px;
+}
+
+.singleColumnHeading span {
+    margin-left: 10px;
+    cursor: pointer;
 }
 
 .dragging {
-    background-color: rgb(241, 241, 241);
+    background-color: rgb(249, 249, 249);
+    opacity: 20%;
+}
+
+.taskDragging {
+    background-color: lightgray;
+    opacity: 20%;
 }
