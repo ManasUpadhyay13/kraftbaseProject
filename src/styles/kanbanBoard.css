@@ -1,0 +1,24 @@
+.kanbanBoard {
+    width: 100%;
+    min-height: 80vh;
+    overflow-x: auto;
+}
+
+.columnWrapper {
+    display: flex;
+    width: max-content;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 50px;
+    padding: 30px;
+}
+
+.singleColumn {
+    min-height: 500px;
+    width: 300px;
+    border: 1px solid black;
+}
+
+.dragging {
+    background-color: rgb(241, 241, 241);
+}

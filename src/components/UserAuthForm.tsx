@@ -7,17 +7,8 @@ import { handleLogIn, handleSignUp } from '../utils/handleUseAuth';
 import '../styles/userAuth.css'
 import { isValidEmail } from '../utils/checkValidEmail';
 import { errorMessage } from '../utils/toastMessage';
+import { UserAuthFormProps } from '../types/userAuthFormTypes';
 
-interface UserAuthFormProps {
-    heading: string;
-    welcomeMessage?: string;
-    subHeading?: string;
-    type: 'login' | 'signup';
-    message: string;
-    messageUrl: string;
-    redirectText: string,
-    buttonText: string;
-}
 
 const UserAuthForm: React.FC<UserAuthFormProps> = ({
     heading,
