@@ -1,3 +1,4 @@
+import { errorMessage, successMessage } from "./toastMessage";
 
 interface User {
     name: string;
@@ -24,7 +25,7 @@ export const handleSignUp = (values: { email: string; password: string; name: st
 
     const existingUser = users.find(user => user.email === values.email);
     if (existingUser) {
-        console.log('User with this email already exists:', existingUser.email);
+        errorMessage("User with this email already exists")
         return;
     }
 
@@ -36,6 +37,7 @@ export const handleSignUp = (values: { email: string; password: string; name: st
 
     users.push(newUser);
     saveUsers(users);
+    successMessage("Account created successfully  🥳")
     return true
 }
 
@@ -45,9 +47,9 @@ export const handleLogIn = (values: { email: string; password: string }) => {
     const existingUser = users.find(user => user.email === values.email && user.password === values.password);
     if (existingUser) {
         localStorage.setItem('isUserLoggedIn', 'true');
-        console.log('User logged in successfully:', existingUser.email);
+        successMessage("User logged in successfully  🥳")
         return true
     } else {
-        console.log('Invalid credentials');
+        errorMessage("Invalid Credentials.")
     }
 };

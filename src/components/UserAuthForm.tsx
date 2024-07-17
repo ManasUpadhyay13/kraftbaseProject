@@ -4,13 +4,18 @@ import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { handleLogIn, handleSignUp } from '../utils/handleUseAuth';
+import '../styles/userAuth.css'
+import { isValidEmail } from '../utils/checkValidEmail';
+import { errorMessage } from '../utils/toastMessage';
 
 interface UserAuthFormProps {
     heading: string;
+    welcomeMessage?: string;
     subHeading?: string;
     type: 'login' | 'signup';
     message: string;
     messageUrl: string;
+    redirectText: string,
     buttonText: string;
 }
 
@@ -19,7 +24,9 @@ const UserAuthForm: React.FC<UserAuthFormProps> = ({
     subHeading,
     type,
     message,
+    welcomeMessage,
     messageUrl,
+    redirectText,
     buttonText,
 }) => {
     const navigate = useNavigate();
@@ -31,6 +38,10 @@ const UserAuthForm: React.FC<UserAuthFormProps> = ({
                 navigate("/")
             }
         } else {
+            if (!isValidEmail(values.email)) {
+                errorMessage("Email is not valid")
+                return
+            }
             let result = handleSignUp(values);
             if (result) {
                 navigate("/")
@@ -40,9 +51,26 @@ const UserAuthForm: React.FC<UserAuthFormProps> = ({
 
     return (
         <div className="auth-container">
+            {
+                (type === 'login') && (
+                    <div className="authImage">
+                        <img src="https://demos.themeselection.com/sneat-mui-react-nextjs-admin-template/demo-1/images/pages/boy-with-rocket-light.png" alt="login image"
+                        />
+                    </div>
+                )
+            }
+            {
+                (type === 'signup') && (
+                    <div className="authImage">
+                        <img src="https://demos.themeselection.com/sneat-mui-react-nextjs-admin-template/demo-1/images/pages/girl-with-laptop-light.png" alt="signup image"
+                        />
+                    </div>
+                )
+            }
             <div className="form-container">
-                <h2 style={{ textAlign: 'center' }}>{heading}</h2>
-                {subHeading && <p style={{ textAlign: 'center' }}>{subHeading}</p>}
+                <h2 style={{ textAlign: 'center', color: "black", fontSize: "2rem" }}>{heading}</h2>
+                {welcomeMessage && <p>{welcomeMessage}</p>}
+                {subHeading && <p style={{ textAlign: 'center', fontSize: "13px" }}>{subHeading}</p>}
                 <Form
                     className='input-container'
                     name={type}
@@ -78,9 +106,21 @@ const UserAuthForm: React.FC<UserAuthFormProps> = ({
                 </Form>
                 <a
                     style={{
-                        cursor: "pointer"
+                        cursor: "pointer",
+                        alignSelf: "center",
+                        fontSize: "13px"
                     }}
-                    onClick={() => navigate(messageUrl)}>{message}</a>
+                    onClick={() => navigate(messageUrl)}>
+                    {message}
+                    <span
+                        style={{
+                            cursor: "pointer",
+                            color: "blue"
+                        }}
+                    >
+                        {redirectText}
+                    </span>
+                </a>
             </div>
         </div>
     );

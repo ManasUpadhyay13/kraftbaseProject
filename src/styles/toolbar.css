@@ -1,0 +1,15 @@
+.toolbar {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    ;
+    padding: 0px 40px;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.toolbar .search {
+    width: 250px;
+}

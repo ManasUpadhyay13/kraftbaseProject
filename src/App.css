@@ -1,38 +1,8 @@
-.krafbaseProject{
+.krafbaseProject {
   border: 1px solid black;
   width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.auth-container {
-  width: 600px;
-  height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.form-container {
-  width: 100%;
-  height: 400px;
-  padding: 2rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  font-weight: normal;
-}
-
-
-.input-container{
-  height: 200px;
-  display: flex;
-  /* align-items: center; */
-  justify-content: space-between;
-  flex-direction: column;
 }

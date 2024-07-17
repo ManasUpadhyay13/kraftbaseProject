@@ -5,7 +5,7 @@ import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import { useEffect } from 'react'
 import { checkUserStatus } from './utils/checkUser'
-// import 'antd/dist/antd.css';
+import { Toaster } from 'react-hot-toast'
 
 
 
@@ -15,17 +15,21 @@ function App() {
 
   useEffect(() => {
     let isUserLoggedIn = checkUserStatus()
-    if(!isUserLoggedIn) {
+    if (!isUserLoggedIn) {
       navigate('/login')
     }
-  },[])
+  }, [])
 
   return (
     <div className='krafbaseProject'>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
       <Routes>
-        <Route path='/' element={<Kanban/>} />
-        <Route path='/login' element={<Login/>} />
-        <Route path='/signUp' element={<SignUp/>} />
+        <Route path='/' element={<Kanban />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signUp' element={<SignUp />} />
       </Routes>
     </div>
   )
