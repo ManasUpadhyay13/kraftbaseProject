@@ -13,7 +13,6 @@ const InputModal = ({
     showModal,
     setShowModal,
     type,
-    label,
     setLabel
 }: InputModelProps) => {
 
@@ -51,7 +50,7 @@ const InputModal = ({
                 />
 
                 {
-                    (type) && (
+                    (type === 'task') && (
                         <Space
                             style={{
                                 marginTop: 20

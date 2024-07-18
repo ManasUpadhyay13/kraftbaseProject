@@ -1,4 +1,4 @@
-import { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
+import { DragEndEvent, DragOverEvent, DragStartEvent, UniqueIdentifier } from "@dnd-kit/core";
 import { Column, Id, Task } from "../types/kanbanBoardTypes";
 import { arrayMove } from "@dnd-kit/sortable";
 
@@ -43,20 +43,24 @@ export function createNewTask(
     setTasks([...task, newTask])
 }
 
-export function onDragStart(event: DragStartEvent, setterMethod: any) {
+export function onDragStart(event: DragStartEvent, setColumn: any, setTask: any) {
     console.log("drag", event)
     if (event.active.data.current?.type === "Column") {
-        setterMethod(event.active.data.current.column)
+        console.log('inside column');
+        setColumn(event.active.data.current.column)
         return
     }
 
     if (event.active.data.current?.type === "Task") {
-        setterMethod(event.active.data.current.task)
+        console.log('inside task');
+        setTask(event.active.data.current.task)
         return
     }
 }
 
-export function onDragEnd(event: DragEndEvent, columns: Column[], setterMethod: any) {
+export function onDragEnd(event: DragEndEvent, columns: Column[], setterMethod: any, setActiveTask: any, setActiveColumn: any) {
+    setActiveColumn(null)
+    setActiveTask(null)
     const { active, over } = event
     if (!over) {
         return
@@ -74,4 +78,48 @@ export function onDragEnd(event: DragEndEvent, columns: Column[], setterMethod: 
 
         return arrayMove(columns, activeColumnIndex, overColumnIndex)
     })
+}
+
+export function onDragOver(event: DragOverEvent, tasks: Task[], setTask: any) {
+    const { active, over } = event
+    if (!over) {
+        return
+    }
+
+    const activeColumnId = active.id
+    const overColumnId = over.id
+
+    if (activeColumnId === overColumnId) return
+
+    // task is dropped in the column
+
+    const isActiveATask = active.data.current?.type === "Task"
+    const isOverATask = over.data.current?.type === "Task"
+
+    if (!isActiveATask) return
+
+    if (isActiveATask && isOverATask) {
+        setTask((tasks: any[]) => {
+            const activeIndex = tasks.findIndex((t: { id: UniqueIdentifier; }) => t.id === activeColumnId)
+            const overIndex = tasks.findIndex((t: { id: UniqueIdentifier; }) => t.id === overColumnId)
+
+            tasks[activeIndex].columnId = tasks[overIndex].columnId
+
+            return arrayMove(tasks, activeIndex, overIndex)
+        })
+    }
+
+    const isOverAColumn = over.data.current?.type === 'Column'
+
+    //dorpping in another another column
+
+    if (isActiveATask && isOverAColumn) {
+        setTask((tasks: any[]) => {
+            const activeIndex = tasks.findIndex((t: { id: UniqueIdentifier; }) => t.id === activeColumnId)
+
+            tasks[activeIndex].columnId = overColumnId
+
+            return arrayMove(tasks, activeIndex, activeIndex)
+        })
+    }
 }

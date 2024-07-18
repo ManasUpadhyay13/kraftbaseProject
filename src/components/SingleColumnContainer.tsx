@@ -51,17 +51,6 @@ const SingleColumnContainer = ({ column, task, setTasks }: SingleColumnContainer
         return task.map((task) => task.id)
     }, [task])
 
-    if (isDragging) {
-        return (
-            <div
-                {...attributes}
-                {...listeners}
-                ref={setNodeRef}
-                className='singleColumn dragging'
-                style={style}
-            ></div>
-        )
-    }
 
     const [taskName, setTaskName] = useState<string>("")
     const [openModal, setOpenModal] = useState<boolean>(false)
@@ -79,6 +68,19 @@ const SingleColumnContainer = ({ column, task, setTasks }: SingleColumnContainer
         let newTask = task.filter((item) => item.columnId === column.id)
         setCurrentTasks(newTask)
     }, [task])
+
+
+    if (isDragging) {
+        return (
+            <div
+                {...attributes}
+                {...listeners}
+                ref={setNodeRef}
+                className='singleColumn dragging'
+                style={style}
+            ></div>
+        )
+    }
 
 
     return (
@@ -108,7 +110,7 @@ const SingleColumnContainer = ({ column, task, setTasks }: SingleColumnContainer
             }
 
             <div className="singleColumnHeading">
-                <p>
+                <div>
                     <span
                         style={{
                             color: "black"
@@ -121,9 +123,9 @@ const SingleColumnContainer = ({ column, task, setTasks }: SingleColumnContainer
                             color: "gray"
                         }}
                     >2</span>
-                </p>
+                </div>
 
-                <p>
+                <div>
                     <span>
                         <Dropdown menu={{ items }}>
                             <a onClick={(e) => e.preventDefault()}>
@@ -138,7 +140,7 @@ const SingleColumnContainer = ({ column, task, setTasks }: SingleColumnContainer
                     >
                         <PlusOutlined />
                     </span>
-                </p>
+                </div>
             </div>
 
             <SortableContext items={tasksIds}>

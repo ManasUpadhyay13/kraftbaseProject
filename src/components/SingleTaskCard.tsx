@@ -30,6 +30,8 @@ const SingleTaskCard = ({ task }: any) => {
             <div
                 ref={setNodeRef}
                 style={style}
+                // {...attributes}
+                // {...listeners}
                 className='singleContainerTasks taskDragging'
             ></div>
         )

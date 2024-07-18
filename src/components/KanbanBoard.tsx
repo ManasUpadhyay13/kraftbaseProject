@@ -3,7 +3,7 @@ import '../styles/kanbanBoard.css'
 import { Column, Task } from '../types/kanbanBoardTypes'
 import { Button } from 'antd'
 import { PlusCircleOutlined } from '@ant-design/icons'
-import { createNewColumn, onDragEnd, onDragStart } from '../utils/kanbanBoard'
+import { createNewColumn, onDragEnd, onDragOver, onDragStart } from '../utils/kanbanBoard'
 import SingleColumnContainer from './SingleColumnContainer'
 import { SortableContext } from '@dnd-kit/sortable'
 import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
@@ -49,8 +49,9 @@ const KanbanBoard = () => {
             <div className="columnWrapper">
                 <DndContext
                     sensors={sensors}
-                    onDragStart={(e) => onDragStart(e, setActiveColumn)}
-                    onDragEnd={(e) => onDragEnd(e, columns, setColumns)}
+                    onDragStart={(e) => onDragStart(e, setActiveColumn, setActiveTask)}
+                    onDragEnd={(e) => onDragEnd(e, columns, setColumns, setActiveColumn, setActiveTask)}
+                    onDragOver={(e) => onDragOver(e, tasks, setTasks)}
                 >
                     <SortableContext items={columnsId}>
                         {
@@ -82,7 +83,6 @@ const KanbanBoard = () => {
                                     />
                                 )}
 
-
                             </DragOverlay>,
                             document.body
                         )
@@ -106,6 +106,7 @@ const KanbanBoard = () => {
                     buttonMessage='Create'
                     showModal={showModal}
                     setShowModal={setShowModal}
+                    type={null}
                 />
             </div>
         </div>
