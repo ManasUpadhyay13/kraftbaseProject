@@ -1,6 +1,7 @@
-import { DragEndEvent, DragOverEvent, DragStartEvent, UniqueIdentifier } from "@dnd-kit/core";
+import { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
 import { Column, Id, Task } from "../types/kanbanBoardTypes";
 import { arrayMove } from "@dnd-kit/sortable";
+import { getColumns, getTasks, updateColumns, updateTasks } from "./redux";
 
 function generateId() {
     // generating and a random number
@@ -8,7 +9,7 @@ function generateId() {
 }
 
 
-export function createNewColumn(column: any, columnName: string, setterMethod: any) {
+export function createNewColumn(column: any, columnName: string) {
 
     if (columnName.length === 0) return
 
@@ -20,7 +21,7 @@ export function createNewColumn(column: any, columnName: string, setterMethod: a
     console.log(columnToAdd);
 
 
-    setterMethod([...column, columnToAdd])
+    updateColumns([...column, columnToAdd])
 }
 
 export function createNewTask(
@@ -28,7 +29,6 @@ export function createNewTask(
     taskName: string,
     label: string,
     task: Task[],
-    setTasks: any
 ) {
     const newTask = {
         id: generateId(),
@@ -40,7 +40,7 @@ export function createNewTask(
     console.log(newTask);
 
 
-    setTasks([...task, newTask])
+    updateTasks([...task, newTask])
 }
 
 export function onDragStart(event: DragStartEvent, setColumn: any, setTask: any) {
@@ -58,7 +58,7 @@ export function onDragStart(event: DragStartEvent, setColumn: any, setTask: any)
     }
 }
 
-export function onDragEnd(event: DragEndEvent, columns: Column[], setterMethod: any, setActiveTask: any, setActiveColumn: any) {
+export function onDragEnd(event: DragEndEvent, setActiveTask: any, setActiveColumn: any) {
     setActiveColumn(null)
     setActiveTask(null)
     const { active, over } = event
@@ -71,55 +71,67 @@ export function onDragEnd(event: DragEndEvent, columns: Column[], setterMethod: 
 
     if (activeColumnId === overColumnId) return
 
-    setterMethod((columns: any[]) => {
-        const activeColumnIndex = columns.findIndex((col) => col.id === activeColumnId)
+    let columns = getColumns()
+    const activeColumnIndex = columns.findIndex((col) => col.id === activeColumnId)
+    const overColumnIndex = columns.findIndex((col) => col.id === overColumnId)
 
-        const overColumnIndex = columns.findIndex((col) => col.id === overColumnId)
+    let newColumnData = arrayMove(columns, activeColumnIndex, overColumnIndex)
 
-        return arrayMove(columns, activeColumnIndex, overColumnIndex)
-    })
+    updateColumns(newColumnData)
 }
 
-export function onDragOver(event: DragOverEvent, tasks: Task[], setTask: any) {
-    const { active, over } = event
+export function onDragOver(event: DragOverEvent) {
+    const { active, over } = event;
     if (!over) {
-        return
+        return;
     }
 
-    const activeColumnId = active.id
-    const overColumnId = over.id
+    const activeColumnId = active.id;
+    const overColumnId = over.id;
 
-    if (activeColumnId === overColumnId) return
+    if (activeColumnId === overColumnId) return;
 
     // task is dropped in the column
+    const isActiveATask = active.data.current?.type === "Task";
+    const isOverATask = over.data.current?.type === "Task";
 
-    const isActiveATask = active.data.current?.type === "Task"
-    const isOverATask = over.data.current?.type === "Task"
+    if (!isActiveATask) return;
 
-    if (!isActiveATask) return
+    let taskData = getTasks();
+    console.log("getting task data", taskData);
 
     if (isActiveATask && isOverATask) {
-        setTask((tasks: any[]) => {
-            const activeIndex = tasks.findIndex((t: { id: UniqueIdentifier; }) => t.id === activeColumnId)
-            const overIndex = tasks.findIndex((t: { id: UniqueIdentifier; }) => t.id === overColumnId)
+        const activeIndex = taskData.findIndex((t) => t.id === activeColumnId);
+        const overIndex = taskData.findIndex((t) => t.id === overColumnId);
 
-            tasks[activeIndex].columnId = tasks[overIndex].columnId
+        console.log("entering");
+        console.log("taskData ", taskData);
 
-            return arrayMove(tasks, activeIndex, overIndex)
-        })
+        // Create a new taskData array with updated columnId
+        const newTaskData = taskData.map((task, index) =>
+            index === activeIndex ? { ...task, columnId: taskData[overIndex].columnId } : task
+        );
+
+        console.log("exiting");
+        const movedTaskData = arrayMove(newTaskData, activeIndex, overIndex);
+        updateTasks(movedTaskData);
     }
 
-    const isOverAColumn = over.data.current?.type === 'Column'
+    const isOverAColumn = over.data.current?.type === 'Column';
 
-    //dorpping in another another column
-
+    // Dropping in another column
     if (isActiveATask && isOverAColumn) {
-        setTask((tasks: any[]) => {
-            const activeIndex = tasks.findIndex((t: { id: UniqueIdentifier; }) => t.id === activeColumnId)
+        const activeIndex = taskData.findIndex((t) => t.id === activeColumnId);
+        console.log("activeIndex", activeIndex, taskData[activeIndex]);
+        console.log("entering");
+        console.log("taskData ", taskData);
 
-            tasks[activeIndex].columnId = overColumnId
+        // Create a new taskData array with updated columnId
+        const newTaskData = taskData.map((task, index) =>
+            index === activeIndex ? { ...task, columnId: overColumnId } : task
+        );
 
-            return arrayMove(tasks, activeIndex, activeIndex)
-        })
+        const movedTaskData = arrayMove(newTaskData, activeIndex, activeIndex);
+        updateTasks(movedTaskData);
     }
 }

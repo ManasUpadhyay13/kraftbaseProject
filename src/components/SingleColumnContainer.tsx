@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from 'react'
 import InputModal from './Modal'
 import { createNewTask } from '../utils/kanbanBoard'
 import SingleTaskCard from './SingleTaskCard'
+import { getTasks } from '../utils/redux'
 
 const items: MenuProps['items'] = [
     {
@@ -25,7 +26,7 @@ const items: MenuProps['items'] = [
 ];
 
 
-const SingleColumnContainer = ({ column, task, setTasks }: SingleColumnContainerProps) => {
+const SingleColumnContainer = ({ column }: SingleColumnContainerProps) => {
 
     const {
         setNodeRef,
@@ -48,8 +49,8 @@ const SingleColumnContainer = ({ column, task, setTasks }: SingleColumnContainer
     }
 
     const tasksIds = useMemo(() => {
-        return task.map((task) => task.id)
-    }, [task])
+        return getTasks().map((task) => task.id)
+    }, [getTasks()])
 
 
     const [taskName, setTaskName] = useState<string>("")
@@ -59,15 +60,15 @@ const SingleColumnContainer = ({ column, task, setTasks }: SingleColumnContainer
 
     useEffect(() => {
         if (!openModal && taskName.length > 0) {
-            createNewTask(column.id, taskName, label, task, setTasks)
+            createNewTask(column.id, taskName, label, getTasks())
             setTaskName("")
         }
     }, [openModal])
 
     useEffect(() => {
-        let newTask = task.filter((item) => item.columnId === column.id)
+        let newTask = getTasks().filter((item) => item.columnId === column.id)
         setCurrentTasks(newTask)
-    }, [task])
+    }, [getTasks()])
 
 
     if (isDragging) {

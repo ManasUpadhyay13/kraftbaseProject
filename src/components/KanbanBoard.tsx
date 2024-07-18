@@ -10,15 +10,14 @@ import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@
 import { createPortal } from 'react-dom'
 import InputModal from './Modal'
 import SingleTaskCard from './SingleTaskCard'
+import { getColumns } from '../utils/redux'
 
 const KanbanBoard = () => {
 
-    const [columns, setColumns] = useState<Column[]>([])
-    const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
+    const columnsId = useMemo(() => getColumns().map((col) => col.id), [getColumns()])
     const [activeColumn, setActiveColumn] = useState<Column | null>(null)
     const [showModal, setShowModal] = useState<boolean>(false)
     const [newColumn, setNewColumn] = useState<string>("")
-    const [tasks, setTasks] = useState<Task[]>([])
     const [activeTask, setActiveTask] = useState<Task | null>(null)
 
 
@@ -32,13 +31,13 @@ const KanbanBoard = () => {
 
     useEffect(() => {
         if (!showModal) {
-            createNewColumn(columns, newColumn, setColumns);
+            createNewColumn(getColumns(), newColumn);
             setNewColumn("")
         }
     }, [showModal]);
 
 
-    console.log(columns);
+    console.log(getColumns());
     console.log(newColumn);
 
 
@@ -50,17 +49,15 @@ const KanbanBoard = () => {
                 <DndContext
                     sensors={sensors}
                     onDragStart={(e) => onDragStart(e, setActiveColumn, setActiveTask)}
-                    onDragEnd={(e) => onDragEnd(e, columns, setColumns, setActiveColumn, setActiveTask)}
-                    onDragOver={(e) => onDragOver(e, tasks, setTasks)}
+                    onDragEnd={(e) => onDragEnd(e, setActiveColumn, setActiveTask)}
+                    onDragOver={(e) => onDragOver(e)}
                 >
                     <SortableContext items={columnsId}>
                         {
-                            columns.map((col) => (
+                            getColumns().map((col) => (
                                 <SingleColumnContainer
                                     key={col.id}
                                     column={col}
-                                    task={tasks}
-                                    setTasks={setTasks}
                                 />
                             ))
                         }
@@ -72,8 +69,6 @@ const KanbanBoard = () => {
                                 {activeColumn && (
                                     <SingleColumnContainer
                                         column={activeColumn}
-                                        task={tasks}
-                                        setTasks={setTasks}
                                     />
                                 )}
 

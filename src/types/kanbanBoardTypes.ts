@@ -14,8 +14,6 @@ export type Task = {
 
 export type SingleColumnContainerProps = {
     column: Column,
-    task: Task[],
-    setTasks: any
 }
 
 
