@@ -1,6 +1,5 @@
 import { useSortable } from '@dnd-kit/sortable'
 import '../styles/kanbanBoard.css'
-import { Task } from '../types/kanbanBoardTypes'
 import { CSS } from '@dnd-kit/utilities'
 import Verified from '../assets/verified.png'
 import { formatDateTime } from '../utils/formatDateTime'

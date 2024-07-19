@@ -36,12 +36,6 @@ const KanbanBoard = () => {
         }
     }, [showModal]);
 
-
-    console.log(getColumns());
-    console.log(newColumn);
-
-
-
     return (
         <div className='kanbanBoard'>
 

@@ -59,15 +59,13 @@ export function createNewTask(
 }
 
 export function onDragStart(event: DragStartEvent, setColumn: any, setTask: any) {
-    console.log("drag", event)
+
     if (event.active.data.current?.type === "Column") {
-        console.log('inside column');
         setColumn(event.active.data.current.column)
         return
     }
 
     if (event.active.data.current?.type === "Task") {
-        console.log('inside task');
         setTask(event.active.data.current.task)
         return
     }
@@ -113,21 +111,17 @@ export function onDragOver(event: DragOverEvent) {
     if (!isActiveATask) return;
 
     let taskData = getTasks();
-    console.log("getting task data", taskData);
 
     if (isActiveATask && isOverATask) {
         const activeIndex = taskData.findIndex((t) => t.id === activeColumnId);
         const overIndex = taskData.findIndex((t) => t.id === overColumnId);
 
-        console.log("entering");
-        console.log("taskData ", taskData);
 
         // Create a new taskData array with updated columnId
         const newTaskData = taskData.map((task, index) =>
             index === activeIndex ? { ...task, columnId: taskData[overIndex].columnId } : task
         );
 
-        console.log("exiting");
         const movedTaskData = arrayMove(newTaskData, activeIndex, overIndex);
         updateTasks(movedTaskData);
     }
@@ -137,9 +131,6 @@ export function onDragOver(event: DragOverEvent) {
     // Dropping in another column
     if (isActiveATask && isOverAColumn) {
         const activeIndex = taskData.findIndex((t) => t.id === activeColumnId);
-        console.log("activeIndex", activeIndex, taskData[activeIndex]);
-        console.log("entering");
-        console.log("taskData ", taskData);
 
         // Create a new taskData array with updated columnId
         const newTaskData = taskData.map((task, index) =>

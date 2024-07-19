@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react'
 import InputModal from './Modal'
 import { createNewTask } from '../utils/kanbanBoard'
 import SingleTaskCard from './SingleTaskCard'
-import { getSearchString, getTasks } from '../utils/redux'
+import { getTasks } from '../utils/redux'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 
