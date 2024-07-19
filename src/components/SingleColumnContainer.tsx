@@ -76,6 +76,11 @@ const SingleColumnContainer = ({ column }: SingleColumnContainerProps) => {
     }, [getTasks()])
 
     useEffect(() => {
+        let newTask = getTasks().filter((item) => item.columnId === column.id)
+        setCurrentTasks(newTask)
+    }, [])
+
+    useEffect(() => {
         const newTask = getTasks().filter((item) =>
             item.content.toLowerCase().includes(searchString.toLowerCase())
         );
@@ -84,13 +89,12 @@ const SingleColumnContainer = ({ column }: SingleColumnContainerProps) => {
 
     useEffect(() => {
         let tasksToBeSorted = currentTasks
-        if (sort) {
-            tasksToBeSorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-            setCurrentTasks(tasksToBeSorted)
-        } else {
+        if (sort === true) {
             tasksToBeSorted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-            setCurrentTasks(tasksToBeSorted)
+        } else {
+            tasksToBeSorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         }
+        setCurrentTasks(tasksToBeSorted)
     }, [sort])
 
 
@@ -99,9 +103,9 @@ const SingleColumnContainer = ({ column }: SingleColumnContainerProps) => {
         if (labelToFilter !== 'All') {
             tasksToBeFiltered = tasksToBeFiltered.filter(task => task.label === labelToFilter);
         }
-        console.log("after filter", tasksToBeFiltered);
+        let newTask = tasksToBeFiltered.filter((item) => item.columnId === column.id)
 
-        setCurrentTasks(tasksToBeFiltered)
+        setCurrentTasks(newTask)
     }, [labelToFilter])
 
     if (isDragging) {

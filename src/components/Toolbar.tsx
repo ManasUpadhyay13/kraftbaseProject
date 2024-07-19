@@ -32,7 +32,7 @@ const Toolbar = () => {
                 (sort === false) && (
                     <Button
                         icon={<SortAscendingOutlined />}
-                        onClick={() => updateSort(!sort)}
+                        onClick={() => updateSort(true)}
                     >
                         Sort By
                     </Button>
@@ -43,7 +43,7 @@ const Toolbar = () => {
                 (sort === true) && (
                     <Button
                         icon={<SortAscendingOutlined />}
-                        onClick={() => updateSort(!sort)}
+                        onClick={() => updateSort(false)}
                         type='primary'
                     >
                         Sort By

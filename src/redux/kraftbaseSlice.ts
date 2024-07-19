@@ -6,7 +6,8 @@ type KraftbaseStore = {
   columns: Column[];
   search: string;
   sort: boolean,
-  label: string
+  label: string,
+  isAdmin: boolean
 };
 
 const initialState: KraftbaseStore = {
@@ -14,7 +15,8 @@ const initialState: KraftbaseStore = {
   columns: [],
   search: '',
   sort: false,
-  label: ""
+  label: "",
+  isAdmin: false
 };
 
 const kraftbaseSlice = createSlice({
@@ -33,12 +35,15 @@ const kraftbaseSlice = createSlice({
     setSort: (state, action: PayloadAction<boolean>) => {
       state.sort = action.payload;
     },
+    setAdmin: (state, action: PayloadAction<boolean>) => {
+      state.isAdmin = action.payload;
+    },
     setLabel: (state, action: PayloadAction<string>) => {
       state.label = action.payload;
     },
   },
 });
 
-export const { setTasks, setColumns, setSearch, setSort, setLabel } = kraftbaseSlice.actions;
+export const { setTasks, setColumns, setSearch, setSort, setLabel, setAdmin } = kraftbaseSlice.actions;
 
 export default kraftbaseSlice.reducer;

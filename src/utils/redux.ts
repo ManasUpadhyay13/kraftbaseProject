@@ -1,4 +1,4 @@
-import { setColumns, setLabel, setSearch, setSort, setTasks } from "../redux/kraftbaseSlice";
+import { setAdmin, setColumns, setLabel, setSearch, setSort, setTasks } from "../redux/kraftbaseSlice";
 import store from "../redux/store";
 import { Column, Task } from "../types/kanbanBoardTypes";
 
@@ -27,6 +27,11 @@ export const getLabel = () => {
     return state.kraftbase.label
 }
 
+export const getIsAdmin = () => {
+    const state = store.getState()
+    return state.kraftbase.isAdmin
+}
+
 export const updateTasks = (tasks: Task[]) => {
     store.dispatch(setTasks(tasks));
 };
@@ -45,4 +50,8 @@ export const updateSort = (newValue: boolean) => {
 
 export const updateLabel = (newValue: string) => {
     store.dispatch(setLabel(newValue))
+}
+
+export const updateIsAdmin = (newValue: boolean) => {
+    store.dispatch(setAdmin(newValue))
 }

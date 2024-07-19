@@ -9,19 +9,25 @@ function generateId() {
 }
 
 
-export function createNewColumn(column: any, columnName: string) {
+export function createNewColumn(column: any, columnName: string, id?: number) {
 
     if (columnName.length === 0) return
 
-    const columnToAdd: Column = {
-        id: generateId(),
-        title: columnName
+    if (id) {
+        const columnToAdd: Column = {
+            id: id,
+            title: columnName
+        }
+        updateColumns([...column, columnToAdd])
+
+    } else {
+        const columnToAdd: Column = {
+            id: generateId(),
+            title: columnName
+        }
+        updateColumns([...column, columnToAdd])
+
     }
-
-    console.log(columnToAdd);
-
-
-    updateColumns([...column, columnToAdd])
 }
 
 export function createNewTask(
@@ -29,19 +35,27 @@ export function createNewTask(
     taskName: string,
     label: string,
     task: Task[],
+    id?: number
 ) {
-    const newTask = {
-        id: generateId(),
-        columnId: columnId,
-        content: taskName,
-        label: label,
-        createdAt: new Date()
+    if (id) {
+        const newTask = {
+            id: id,
+            columnId: columnId,
+            content: taskName,
+            label: label,
+            createdAt: new Date()
+        }
+        updateTasks([...task, newTask])
+    } else {
+        const newTask = {
+            id: generateId(),
+            columnId: columnId,
+            content: taskName,
+            label: label,
+            createdAt: new Date()
+        }
+        updateTasks([...task, newTask])
     }
-
-    console.log(newTask);
-
-
-    updateTasks([...task, newTask])
 }
 
 export function onDragStart(event: DragStartEvent, setColumn: any, setTask: any) {

@@ -1,3 +1,5 @@
+import { createNewColumn, createNewTask } from "./kanbanBoard";
+import { getColumns, getTasks } from "./redux";
 import { errorMessage, successMessage } from "./toastMessage";
 
 interface User {
@@ -44,7 +46,37 @@ export const handleSignUp = (values: { email: string; password: string; name: st
 export const handleLogIn = (values: { email: string; password: string }) => {
     const users = getUsers();
 
+    // logic for admin 
+
+    if (values.email === 'admin@gmail.com') {
+
+        // creating three columns
+
+        createNewColumn(getColumns(), 'Todo', 2345)
+        createNewColumn(getColumns(), 'In Process', 7653)
+        createNewColumn(getColumns(), 'Finished', 9843)
+
+        // creating pre defined tasks for admin
+
+        createNewTask(2345, 'Learn HTML', "Easy", getTasks(), 3453)
+        createNewTask(2345, 'Start DSA', "Medium", getTasks(), 3413)
+        createNewTask(2345, 'Make notes on express.js', "Hard", getTasks(), 3423)
+
+        createNewTask(7653, 'Adding backend in e-commerece project', "Hard", getTasks(), 6453)
+        createNewTask(7653, 'Studying about Stripe', "Medium", getTasks(), 5438)
+
+        createNewTask(9843, 'Post a reel on BST.', "Hard", getTasks(), 4567)
+        createNewTask(9843, 'Send cold email to MARK', "Easy", getTasks(), 3245)
+        createNewTask(9843, '4 Hours of code', "Hard", getTasks(), 9872)
+
+
+        localStorage.setItem('isUserLoggedIn', 'true');
+        successMessage("User logged in successfully  🥳")
+        return true
+    }
+
     const existingUser = users.find(user => user.email === values.email && user.password === values.password);
+
     if (existingUser) {
         localStorage.setItem('isUserLoggedIn', 'true');
         successMessage("User logged in successfully  🥳")
