@@ -4,6 +4,8 @@ import Toolbar from '../components/Toolbar'
 import '../styles/kanban.css'
 
 const Kanban = () => {
+
+
   return (
     <div className='kanban'>
       <Navbar />

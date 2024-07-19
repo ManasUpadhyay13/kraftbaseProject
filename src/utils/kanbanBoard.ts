@@ -34,7 +34,8 @@ export function createNewTask(
         id: generateId(),
         columnId: columnId,
         content: taskName,
-        label: label
+        label: label,
+        createdAt: new Date()
     }
 
     console.log(newTask);

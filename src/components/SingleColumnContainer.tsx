@@ -9,7 +9,9 @@ import { useEffect, useMemo, useState } from 'react'
 import InputModal from './Modal'
 import { createNewTask } from '../utils/kanbanBoard'
 import SingleTaskCard from './SingleTaskCard'
-import { getTasks } from '../utils/redux'
+import { getSearchString, getTasks } from '../utils/redux'
+import { useSelector } from 'react-redux'
+import { RootState } from '../redux/store'
 
 const items: MenuProps['items'] = [
     {
@@ -57,6 +59,9 @@ const SingleColumnContainer = ({ column }: SingleColumnContainerProps) => {
     const [openModal, setOpenModal] = useState<boolean>(false)
     const [label, setLabel] = useState<string>("Easy")
     const [currentTasks, setCurrentTasks] = useState<Task[]>([])
+    const searchString = useSelector((state: RootState) => state.kraftbase.search);
+    const sort = useSelector((state: RootState) => state.kraftbase.sort);
+    const labelToFilter = useSelector((state: RootState) => state.kraftbase.label);
 
     useEffect(() => {
         if (!openModal && taskName.length > 0) {
@@ -70,6 +75,34 @@ const SingleColumnContainer = ({ column }: SingleColumnContainerProps) => {
         setCurrentTasks(newTask)
     }, [getTasks()])
 
+    useEffect(() => {
+        const newTask = getTasks().filter((item) =>
+            item.content.toLowerCase().includes(searchString.toLowerCase())
+        );
+        setCurrentTasks(newTask);
+    }, [searchString]);
+
+    useEffect(() => {
+        let tasksToBeSorted = currentTasks
+        if (sort) {
+            tasksToBeSorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            setCurrentTasks(tasksToBeSorted)
+        } else {
+            tasksToBeSorted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+            setCurrentTasks(tasksToBeSorted)
+        }
+    }, [sort])
+
+
+    useEffect(() => {
+        let tasksToBeFiltered = getTasks()
+        if (labelToFilter !== 'All') {
+            tasksToBeFiltered = tasksToBeFiltered.filter(task => task.label === labelToFilter);
+        }
+        console.log("after filter", tasksToBeFiltered);
+
+        setCurrentTasks(tasksToBeFiltered)
+    }, [labelToFilter])
 
     if (isDragging) {
         return (
@@ -123,7 +156,7 @@ const SingleColumnContainer = ({ column }: SingleColumnContainerProps) => {
                         style={{
                             color: "gray"
                         }}
-                    >2</span>
+                    >{currentTasks.length}</span>
                 </div>
 
                 <div>

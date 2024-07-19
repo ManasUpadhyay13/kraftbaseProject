@@ -40,6 +40,42 @@
     min-height: 100px;
     padding: 10px;
     cursor: all-scroll;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+
+.singleContainerTasks .label {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leftLabel p {
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 10px;
+}
+
+.easyLabel {
+    background-color: green;
+    color: white;
+}
+
+.mediumLabel {
+    background-color: yellow;
+}
+
+.hardLabel {
+    background-color: red;
+    color: white;
+}
+
+.rightLabel img {
+    width: 20px;
 }
 
 .singleColumnHeading span {

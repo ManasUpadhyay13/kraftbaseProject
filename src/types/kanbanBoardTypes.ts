@@ -9,7 +9,8 @@ export type Task = {
     id: Id;
     columnId: Id,
     content: string,
-    label: string
+    label: string,
+    createdAt: Date
 }
 
 export type SingleColumnContainerProps = {

@@ -2,6 +2,8 @@ import { useSortable } from '@dnd-kit/sortable'
 import '../styles/kanbanBoard.css'
 import { Task } from '../types/kanbanBoardTypes'
 import { CSS } from '@dnd-kit/utilities'
+import Verified from '../assets/verified.png'
+import { formatDateTime } from '../utils/formatDateTime'
 
 const SingleTaskCard = ({ task }: any) => {
 
@@ -46,21 +48,59 @@ const SingleTaskCard = ({ task }: any) => {
             className="singleContainerTasks">
             <p
                 style={{
-                    fontSize: 12,
+                    fontSize: 11,
                     color: "gray"
                 }}
             >
                 #{task.id}
                 <span>
-                    12 July 2023
+                    &nbsp;
+                    &nbsp;
+                    {formatDateTime(task.createdAt)}
                 </span>
             </p>
-            <p>
+            <p
+                style={{
+                    fontSize: 12,
+                }}
+            >
                 {task.content}
             </p>
-            <p>
-                {task.label}
-            </p>
+            <div className="label">
+                <div className="leftLabel">
+
+                    {
+                        (task.label === "Easy") && (
+                            <p className="easyLabel">
+                                Easy
+                            </p>
+                        )
+                    }
+
+                    {
+                        (task.label === "Medium") && (
+                            <p className="mediumLabel">
+                                Medium
+                            </p>
+                        )
+                    }
+
+
+                    {
+                        (task.label === "Hard") && (
+                            <p className="hardLabel">
+                                Hard
+                            </p>
+                        )
+                    }
+
+                </div>
+
+                <div className="rightLabel">
+                    <img src={Verified}
+                        alt="verified" />
+                </div>
+            </div>
         </div>
     )
 }
